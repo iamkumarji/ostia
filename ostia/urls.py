@@ -6,10 +6,13 @@ from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from core.views import contact_form_submission
+
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
+    path("contact/submit/", contact_form_submission, name="contact_form_submit"),
 ]
 
 if settings.DEBUG:

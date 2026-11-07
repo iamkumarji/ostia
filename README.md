@@ -48,6 +48,10 @@ Every page is composed from the same section library, so the whole site is edita
 touching templates. Sections carry a `tone` (cream / white / ink / violet) and, where relevant, a
 `style`, which lets an editor vary the rhythm of a page from the admin.
 
+The homepage's "How it works" section uses the process block's cycle diagram style. All of its
+wording is edited in the admin, including the labels in the block's "Diagram text" group. The
+diagram's shape has six fixed positions, so the admin rejects this style with any other step count.
+
 ### Design
 
 Paper-white canvas with near-black ink, indigo as the primary and a vivid orange accent, plus a
@@ -85,6 +89,26 @@ Accessibility and robustness:
 - `prefers-reduced-motion` disables animation throughout.
 - Reveal styles are scoped under a `.js` class, so nothing is hidden if scripting is unavailable.
 - Interactive controls are real buttons with `aria-expanded` / `aria-selected` / `aria-pressed`.
+
+## Contact form and email
+
+Fields are edited on the contact page (form builder) and enquiries are saved under **Forms**. An
+editor can put the same form on any page with the **Contact form** section.
+
+Set up email in **Settings > Email settings**: enter the SMTP details and addresses, then enter an
+address under "Send a test email to" and save. The result appears on that page. Each enquiry then
+sends a notification to the team and, optionally, a confirmation to the visitor.
+
+- An enquiry is saved before anything is sent, so a mail failure cannot lose it. A failure is only
+  logged (`core.models` / `core.enquiries`), and the visitor still sees the success message, so
+  check **Forms** if mail stops arriving.
+- These settings send real email even with the dev settings. Leave them blank locally to send nothing.
+- The SMTP password is stored unencrypted in the database, which is excluded from git.
+- Spam protection is a honeypot field only. There is no rate limit or CAPTCHA.
+- Behind an HTTPS proxy, set the `CSRF_TRUSTED_ORIGINS` and `SECURE_SSL_REDIRECT=true` environment
+  variables, or the forms return 403.
+
+Run the tests with `manage.py test core`.
 
 ## Notes
 

@@ -1,15 +1,23 @@
+import logging
+from email.utils import formataddr
+
+from django import forms
+from django.core.mail import EmailMessage, get_connection
 from django.db import models
+from django.utils import timezone
 from modelcluster.fields import ParentalKey
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
-from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, HelpPanel, InlinePanel, MultiFieldPanel
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractForm, AbstractFormField
 from wagtail.contrib.forms.panels import FormSubmissionsPanel
-from wagtail.contrib.settings.models import BaseGenericSetting, register_setting
+from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting, register_setting
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 from .blocks import SectionStreamBlock
+
+logger = logging.getLogger(__name__)
 
 STANDARD_CATEGORIES = [
     ("quality", "Quality"),
@@ -71,6 +79,159 @@ class SiteSettings(BaseGenericSetting):
 
     class Meta:
         verbose_name = "Site settings"
+
+
+@register_setting(icon="mail")
+class EmailSettings(BaseSiteSetting):
+    """SMTP details for enquiry emails, kept here so they can change without a deploy."""
+
+    email_backend = models.CharField(
+        max_length=255, default="django.core.mail.backends.smtp.EmailBackend", editable=False
+    )
+    smtp_host = models.CharField(
+        "SMTP host", max_length=255, blank=True, help_text="For example smtp.gmail.com"
+    )
+    smtp_port = models.IntegerField("SMTP port", default=587, help_text="587 for TLS, 465 for SSL")
+    use_tls = models.BooleanField("Use TLS", default=True, help_text="Recommended for port 587")
+    use_ssl = models.BooleanField(
+        "Use SSL", default=False, help_text="For port 465. Ignored if TLS is also ticked"
+    )
+    smtp_username = models.CharField("SMTP username", max_length=255, blank=True)
+    smtp_password = models.CharField(
+        "SMTP password",
+        max_length=255,
+        blank=True,
+        help_text=(
+            "Most providers need an app password. Leave blank to keep the current one. "
+            "It is stored unencrypted, so only give trusted users access to this page."
+        ),
+    )
+    sender_name = models.CharField(
+        max_length=80, default="Ostia Management", help_text="Shown as the sender and in the emails"
+    )
+    from_email = models.EmailField(
+        "From email", blank=True, help_text="Most providers require this to match the SMTP mailbox"
+    )
+    contact_form_recipient = models.EmailField(
+        blank=True, help_text="Where enquiries are sent"
+    )
+    contact_form_cc = models.EmailField("Contact form CC", blank=True)
+    send_confirmation_email = models.BooleanField(
+        "Send confirmation to visitor",
+        default=True,
+        help_text="Uses the thank-you text from the contact page",
+    )
+    test_email = models.EmailField(
+        "Send a test email to",
+        blank=True,
+        help_text="Enter an address and save. The result appears below and this field clears.",
+    )
+    is_configured = models.BooleanField("Ready to send", default=False, editable=False)
+    last_test_date = models.DateTimeField("Last tested", null=True, blank=True, editable=False)
+    last_test_status = models.CharField("Last test result", max_length=255, blank=True, editable=False)
+
+    panels = [
+        HelpPanel(
+            "Host, username, password, from email and recipient are all needed before email is sent. "
+            "Until then, enquiries are still saved under Forms."
+        ),
+        MultiFieldPanel(
+            [
+                FieldRowPanel([FieldPanel("smtp_host"), FieldPanel("smtp_port")]),
+                FieldRowPanel([FieldPanel("use_tls"), FieldPanel("use_ssl")]),
+                FieldPanel("smtp_username"),
+                FieldPanel(
+                    "smtp_password",
+                    widget=forms.PasswordInput(
+                        render_value=False, attrs={"autocomplete": "new-password"}
+                    ),
+                ),
+            ],
+            heading="SMTP server",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("sender_name"),
+                FieldPanel("from_email"),
+                FieldPanel("contact_form_recipient"),
+                FieldPanel("contact_form_cc"),
+                FieldPanel("send_confirmation_email"),
+            ],
+            heading="Addresses and options",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("test_email"),
+                FieldPanel("is_configured", read_only=True),
+                FieldPanel("last_test_date", read_only=True),
+                FieldPanel("last_test_status", read_only=True),
+            ],
+            heading="Test",
+        ),
+    ]
+
+    class Meta:
+        verbose_name = "Email settings"
+
+    def __str__(self):
+        return "Email settings"
+
+    @property
+    def sender(self):
+        return formataddr((self.sender_name, self.from_email))
+
+    def connection(self):
+        """An explicit connection, so these details never touch Django's global settings."""
+        return get_connection(
+            backend=self.email_backend,
+            host=self.smtp_host,
+            port=self.smtp_port,
+            username=self.smtp_username,
+            password=self.smtp_password,
+            use_tls=self.use_tls,
+            use_ssl=self.use_ssl,
+            timeout=15,
+            fail_silently=False,
+        )
+
+    def _send_test_email(self):
+        self.last_test_date = timezone.now()
+        if not self.is_configured:
+            self.last_test_status = "Not sent: fill in the required fields first."
+            return
+        try:
+            EmailMessage(
+                subject="Email settings test",
+                body=f"This test confirms that {self.sender_name} can send email through {self.smtp_host}.",
+                from_email=self.sender,
+                to=[self.test_email],
+                connection=self.connection(),
+            ).send(fail_silently=False)
+            self.last_test_status = f"Sent to {self.test_email}. Check that it arrived."
+        except Exception as error:
+            logger.exception("Test email failed")
+            self.last_test_status = f"Failed: {type(error).__name__}: {error}"[:255]
+
+    def save(self, *args, **kwargs):
+        # The password box never shows the stored value, so blank means "keep it".
+        if not self.smtp_password and self.pk:
+            self.smtp_password = (
+                type(self).objects.filter(pk=self.pk).values_list("smtp_password", flat=True).first() or ""
+            )
+        # Django refuses to send with both set.
+        if self.use_tls and self.use_ssl:
+            self.use_ssl = False
+        self.is_configured = bool(
+            self.smtp_host
+            and self.smtp_username
+            and self.smtp_password
+            and self.from_email
+            and self.contact_form_recipient
+        )
+        if self.test_email:
+            self._send_test_email()
+            self.test_email = ""
+        super().save(*args, **kwargs)
 
 
 def image_field(help_text=""):
@@ -244,9 +405,27 @@ class ContactPage(HeaderMixin, AbstractEmailForm):
         FieldPanel("body"),
         MultiFieldPanel(
             [
-                FieldRowPanel([FieldPanel("from_address"), FieldPanel("to_address")]),
+                HelpPanel("Addresses and the mail server are set in Settings > Email settings."),
                 FieldPanel("subject"),
             ],
             heading="Email notification",
         ),
     ]
+
+    def serve(self, request, *args, **kwargs):
+        from .enquiries import is_spam
+
+        if request.method == "POST" and is_spam(request):
+            return self.render_landing_page(request)
+        return super().serve(request, *args, **kwargs)
+
+    def process_form_submission(self, form):
+        """Save the enquiry first, so that a mail failure cannot lose it."""
+        from .enquiries import send_enquiry_emails
+
+        submission = AbstractForm.process_form_submission(self, form)
+        try:
+            send_enquiry_emails(self, form)
+        except Exception:
+            logger.exception("Enquiry %s was saved but could not be emailed", submission.pk)
+        return submission

@@ -3,6 +3,7 @@
 Every block renders from templates/blocks/<name>.html. Blocks carry presentation
 choices (tone, style) so editors can vary the rhythm of a page without new code.
 """
+from django.core.exceptions import ValidationError
 from wagtail import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
@@ -114,7 +115,41 @@ class CardGridBlock(SectionHeadingMixin):
 class ProcessStep(blocks.StructBlock):
     title = blocks.CharBlock()
     text = blocks.TextBlock(required=False)
-    meta = blocks.CharBlock(required=False, help_text="Small label, e.g. Stage 1")
+    meta = blocks.CharBlock(
+        required=False,
+        help_text=(
+            "Small label, e.g. Stage 1. In the cycle diagram this is the phase shown in the centre "
+            "of the loop; consecutive steps with the same label show it once in the list."
+        ),
+    )
+
+
+class CycleDiagramText(blocks.StructBlock):
+    """Wording inside the cycle diagram. Leaving a field blank hides that label."""
+
+    centre = blocks.CharBlock(
+        required=False,
+        max_length=28,
+        default="Three-year cycle",
+        label="Centre of the loop",
+        help_text="Shown where the diagram does not follow the scroll, such as on phones",
+    )
+    line = blocks.CharBlock(
+        required=False, max_length=28, default="Initial certification", label="Above steps 1 to 4"
+    )
+    year_1 = blocks.CharBlock(required=False, max_length=14, default="Year 1", label="First step 5 marker")
+    year_2 = blocks.CharBlock(required=False, max_length=14, default="Year 2", label="Second step 5 marker")
+    year_3 = blocks.CharBlock(required=False, max_length=14, default="Year 3", label="Step 6 marker")
+    next_cycle = blocks.CharBlock(
+        required=False, max_length=14, default="Next cycle", label="Dotted arrow"
+    )
+    counter = blocks.CharBlock(
+        required=False,
+        max_length=28,
+        default="Step {n} of {total}",
+        label="Progress text",
+        help_text="{n} becomes the current step and {total} the number of steps",
+    )
 
 
 class ProcessBlock(SectionHeadingMixin):
@@ -127,7 +162,22 @@ class ProcessBlock(SectionHeadingMixin):
         ],
         default="steps",
     )
+    diagram = CycleDiagramText(label="Diagram text (cycle diagram style only)")
     tone = blocks.ChoiceBlock(choices=TONES, default="tint")
+
+    def clean(self, value):
+        cleaned = super().clean(value)
+        count = len(cleaned["steps"])
+        if cleaned["style"] == "cycle" and count != 6:
+            raise blocks.StructBlockValidationError(
+                block_errors={
+                    "style": ValidationError(
+                        f"The cycle diagram needs exactly 6 steps, and this section has {count}. "
+                        "Change the number of steps or choose another style."
+                    )
+                }
+            )
+        return cleaned
 
     class Meta:
         icon = "list-ol"
@@ -251,6 +301,26 @@ class StandardsShowcaseBlock(SectionHeadingMixin):
         template = "blocks/standards_showcase.html"
 
 
+class ContactFormBlock(SectionHeadingMixin):
+    """The contact page's form, on any page. Its fields are edited on the contact page."""
+
+    tone = blocks.ChoiceBlock(choices=TONES, default="tint")
+
+    def get_context(self, value, parent_context=None):
+        from .models import ContactPage
+
+        context = super().get_context(value, parent_context=parent_context)
+        page = ContactPage.objects.live().first()
+        if page:
+            context["form"] = page.get_form(page=page)
+        return context
+
+    class Meta:
+        icon = "mail"
+        label = "Contact form"
+        template = "blocks/contact_form.html"
+
+
 class SectionStreamBlock(blocks.StreamBlock):
     hero = HeroBlock()
     marquee = MarqueeBlock()
@@ -267,3 +337,4 @@ class SectionStreamBlock(blocks.StreamBlock):
     document = DocumentCardBlock()
     cta = CTABlock()
     text = RichTextSectionBlock()
+    contact_form = ContactFormBlock()

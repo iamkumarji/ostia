@@ -6,22 +6,11 @@
 
   <section class="section section--paper">
     <div class="shell contact-layout">
-      <div data-reveal>
+      <div data-reveal id="enquiry-form">
         <h2 data-split>Send us an enquiry</h2>
         <p class="lede" style="margin-bottom:28px">Tell us the standard, your scope and how many sites you operate. We will come back with a quotation and a proposed audit programme.</p>
 
-        <form method="post" class="form-grid" novalidate>
-          {% csrf_token %}
-          {% for field in form %}
-            <div class="form-field">
-              {{ field.label_tag }}
-              {{ field }}
-              {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
-              {{ field.errors }}
-            </div>
-          {% endfor %}
-          <div><button class="btn btn--primary" type="submit" data-magnetic>Send enquiry <span class="btn__arrow" aria-hidden="true">&#8599;</span></button></div>
-        </form>
+        {% include "includes/enquiry_form.html" %}
       </div>
 
       {% with s=settings.core.SiteSettings %}

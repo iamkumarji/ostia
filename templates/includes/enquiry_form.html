@@ -1,0 +1,21 @@
+{% comment %}Shared by the contact page and the Contact Form block. Fields come from the contact page's
+form builder. Pass `action` to post to the block's route; without it the form posts to its own page.{% endcomment %}
+{% for message in messages %}
+  <p class="enquiry-alert enquiry-alert--{{ message.level_tag }}" role="{% if message.level_tag == 'error' %}alert{% else %}status{% endif %}">{{ message }}</p>
+{% endfor %}
+<form method="post" class="form-grid"{% if action %} action="{{ action }}"{% else %} novalidate{% endif %}>
+  {% csrf_token %}
+  <div class="form-hp" aria-hidden="true">
+    <label for="contact-website">Leave this field empty</label>
+    <input type="text" id="contact-website" name="contact_website" tabindex="-1" autocomplete="off">
+  </div>
+  {% for field in form %}
+    <div class="form-field">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
+      {{ field.errors }}
+    </div>
+  {% endfor %}
+  <div><button class="btn btn--primary" type="submit" data-magnetic>Send enquiry <span class="btn__arrow" aria-hidden="true">&#8599;</span></button></div>
+</form>

@@ -1,6 +1,6 @@
 {% comment %}Six-step certification cycle: steps 1-4 happen once and feed a loop of surveillance and
 recertification. data-upto marks the step at which a part of the diagram lights up.{% endcomment %}
-<div class="cycle" data-cycle>
+<div class="cycle" data-cycle data-counter="{{ value.diagram.counter }}">
   <div class="cycle__dial" aria-hidden="true">
     <div class="cycle__map">
       <svg viewBox="0 0 400 500" focusable="false">
@@ -19,11 +19,11 @@ recertification. data-upto marks the step at which a part of the diagram lights 
         <path class="cycle__seg" data-upto="5" pathLength="1" d="M290 62 H300 C320 62 330 78 330 98 V320 A130 130 0 0 1 200 450 A130 130 0 0 1 70 320" />
         <path class="cycle__seg" data-upto="6" pathLength="1" d="M70 320 A130 130 0 0 1 200 190" />
 
-        <text class="cycle__label" x="33" y="28">Initial certification</text>
-        <text class="cycle__label" x="200" y="492" text-anchor="middle">Year 1</text>
-        <text class="cycle__label" x="36" y="325" text-anchor="end">Year 2</text>
-        <text class="cycle__label" x="200" y="155" text-anchor="middle">Year 3</text>
-        <text class="cycle__label" x="238" y="178">Next cycle</text>
+        {% if value.diagram.line %}<text class="cycle__label" x="33" y="28">{{ value.diagram.line }}</text>{% endif %}
+        {% if value.diagram.year_1 %}<text class="cycle__label" x="200" y="492" text-anchor="middle">{{ value.diagram.year_1 }}</text>{% endif %}
+        {% if value.diagram.year_2 %}<text class="cycle__label" x="36" y="325" text-anchor="end">{{ value.diagram.year_2 }}</text>{% endif %}
+        {% if value.diagram.year_3 %}<text class="cycle__label" x="200" y="155" text-anchor="middle">{{ value.diagram.year_3 }}</text>{% endif %}
+        {% if value.diagram.next_cycle %}<text class="cycle__label" x="238" y="178">{{ value.diagram.next_cycle }}</text>{% endif %}
 
         <g class="cycle__node" data-upto="1" transform="translate(50 62)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">1</text></g>
         <g class="cycle__node" data-upto="2" transform="translate(130 62)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">2</text></g>
@@ -34,7 +34,7 @@ recertification. data-upto marks the step at which a part of the diagram lights 
         <g class="cycle__node" data-upto="6" transform="translate(200 190)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">6</text></g>
       </svg>
       <div class="cycle__hub">
-        <span class="cycle__hub-phase" data-cycle-phase>Three-year cycle</span>
+        <span class="cycle__hub-phase" data-cycle-phase>{{ value.diagram.centre }}</span>
         <span class="cycle__hub-count" data-cycle-count></span>
       </div>
     </div>

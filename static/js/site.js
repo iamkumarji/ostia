@@ -377,7 +377,9 @@
           mark.classList.toggle("is-now", upto === now);
         });
         phase.textContent = steps[now - 1].getAttribute("data-phase") || resting;
-        count.textContent = "Step " + now + " of " + steps.length;
+        count.textContent = (root.getAttribute("data-counter") || "")
+          .replace("{n}", now)
+          .replace("{total}", steps.length);
       }
       update();
       on(window, "scroll", update, { passive: true });

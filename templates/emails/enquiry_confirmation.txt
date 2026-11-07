@@ -1,0 +1,10 @@
+{% autoescape off %}Hello{% if first_name %} {{ first_name }}{% endif %},
+
+{% if thank_you_text %}{{ thank_you_text }}{% else %}We have received your enquiry and will be in touch.{% endif %}
+
+{{ company }}{% if phone %}
+Telephone: {{ phone }}{% endif %}{% if email %}
+Email: {{ email }}{% endif %}
+
+You are receiving this because this address was entered on our enquiry form. If that was not you, you can ignore this email.
+{% endautoescape %}

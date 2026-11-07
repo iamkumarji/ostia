@@ -1,0 +1,11 @@
+{% if form %}
+  {% url 'contact_form_submit' as submit_url %}
+  <section class="section section--{{ value.tone }}" id="enquiry-form">
+    <div class="shell">
+      {% include "blocks/_heading.html" with value=value split=True %}
+      <div class="enquiry-card">
+        {% include "includes/enquiry_form.html" with action=submit_url %}
+      </div>
+    </div>
+  </section>
+{% endif %}

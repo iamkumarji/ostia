@@ -1,0 +1,6 @@
+{% autoescape off %}New website enquiry for {{ company }}
+{{ submitted_at|date:"j F Y, H:i" }}
+{% for label, value in rows %}
+{{ label }}:
+{% if value %}{{ value }}{% else %}Not provided{% endif %}
+{% endfor %}{% endautoescape %}

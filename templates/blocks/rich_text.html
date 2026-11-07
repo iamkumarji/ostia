@@ -1,0 +1,7 @@
+{% load wagtailcore_tags %}
+<section class="section section--{{ value.tone }}">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value %}
+    <div class="prose" data-reveal>{{ value.body|richtext }}</div>
+  </div>
+</section>

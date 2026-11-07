@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+  {% include "includes/page_header.html" %}
+
+  <section class="section section--paper">
+    <div class="shell">
+      <div class="filter-bar" data-filter-bar>
+        <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">All schemes</button>
+        {% for key, label, items in groups %}
+          <button class="filter-btn" type="button" data-filter="{{ key }}" aria-pressed="false">{{ label }}</button>
+        {% endfor %}
+      </div>
+
+      <div class="standards">
+        {% for service in services %}
+          <a class="std accent-{{ service.accent }}" href="{% pageurl service %}" data-category="{{ service.category }}" data-reveal style="--d:{{ forloop.counter0 }}0ms">
+            <div class="std__top">
+              <span class="std__code">{{ service.code }}</span>
+              <span class="arrow-btn" aria-hidden="true">&#8599;</span>
+            </div>
+            {% if service.system_name %}<span class="std__system">{{ service.system_name }}</span>{% endif %}
+            <p>{{ service.summary|truncatewords:22 }}</p>
+            <div class="std__foot">
+              {% if service.accredited %}<span class="tag-ok">UAF accredited</span>{% else %}<span></span>{% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {% for block in page.body %}{% include_block block %}{% endfor %}
+{% endblock %}

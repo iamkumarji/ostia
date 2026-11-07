@@ -1,0 +1,16 @@
+<section class="section section--{{ value.tone }}">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value center=True %}
+    <div class="faq">
+      {% for item in value.items %}
+        <div class="faq__item" data-reveal style="--d:{{ forloop.counter0 }}0ms">
+          <button class="faq__q" type="button" aria-expanded="false">
+            {{ item.question }}
+            <span class="faq__sign" aria-hidden="true"></span>
+          </button>
+          <div class="faq__a"><p>{{ item.answer }}</p></div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

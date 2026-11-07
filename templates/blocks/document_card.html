@@ -1,0 +1,20 @@
+<section class="section section--{{ value.tone|default:'tint' }}">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value %}
+    {% if value.document %}{% firstof value.document.url as doc_url %}{% else %}{% firstof value.url "" as doc_url %}{% endif %}
+    <div class="doc" data-reveal>
+      <div class="doc__icon" aria-hidden="true">&#128196;</div>
+      <div class="doc__text">
+        <h3>{{ value.title }}</h3>
+        {% if value.description %}<p>{{ value.description }}</p>{% endif %}
+        {% if value.pages %}<p style="margin-top:6px;font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--orange)">PDF &middot; {{ value.pages }}</p>{% endif %}
+      </div>
+      {% if doc_url %}
+        <div class="btn-row" style="margin:0">
+          <a class="btn btn--primary btn--sm" href="{{ doc_url }}" target="_blank" rel="noopener">Open <span class="btn__arrow" aria-hidden="true">&#8599;</span></a>
+          <a class="btn btn--outline btn--sm" href="{{ doc_url }}" download>Download</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

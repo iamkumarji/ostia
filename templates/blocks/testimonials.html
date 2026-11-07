@@ -1,0 +1,17 @@
+<section class="section section--grad">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value center=True %}
+    <div class="quotes">
+      {% for item in value.items %}
+        <figure class="quote" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+          <div class="quote__stars" aria-label="{{ item.rating }} out of 5">{% for _ in "12345"|make_list %}{% if forloop.counter <= item.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</div>
+          <blockquote><p>&ldquo;{{ item.quote }}&rdquo;</p></blockquote>
+          <figcaption class="quote__who">
+            <span class="avatar" aria-hidden="true">{{ item.name|slice:":1" }}</span>
+            <span><strong>{{ item.name }}</strong>{% if item.organisation %}<small>{{ item.organisation }}</small>{% endif %}</span>
+          </figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<section class="page-head {% if dark %}page-head--dark{% endif %}">
+  {% if page.header_image %}
+    <div class="page-head__art" aria-hidden="true">{% image page.header_image fill-900x700 alt="" %}</div>
+  {% endif %}
+  <div class="shell page-head__inner">
+    {% if page.get_parent.get_parent %}
+      <ul class="crumbs">
+        <li><a href="/">Home</a></li>
+        {% if page.get_parent.depth > 2 %}<li><a href="{% pageurl page.get_parent %}">{{ page.get_parent.title }}</a></li>{% endif %}
+        <li>{{ page.title }}</li>
+      </ul>
+    {% endif %}
+    {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
+    <h1 data-split>{{ page.title }}</h1>
+    {% if page.intro %}<p data-reveal style="--d:120ms">{{ page.intro }}</p>{% endif %}
+  </div>
+</section>

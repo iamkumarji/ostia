@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+  {% include "includes/page_header.html" %}
+
+  <section class="section section--paper">
+    <div class="shell contact-layout">
+      <div data-reveal>
+        <h2 data-split>Send us an enquiry</h2>
+        <p class="lede" style="margin-bottom:28px">Tell us the standard, your scope and how many sites you operate. We will come back with a quotation and a proposed audit programme.</p>
+
+        <form method="post" class="form-grid" novalidate>
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="form-field">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
+              {{ field.errors }}
+            </div>
+          {% endfor %}
+          <div><button class="btn btn--primary" type="submit" data-magnetic>Send enquiry <span class="btn__arrow" aria-hidden="true">&#8599;</span></button></div>
+        </form>
+      </div>
+
+      {% with s=settings.core.SiteSettings %}
+        <aside class="contact-panel" data-reveal style="--d:120ms">
+          <div class="dots" aria-hidden="true"></div>
+          <h3>Talk to the team</h3>
+          <p style="margin:0">Impartial advice on the right scheme for your business &mdash; no obligation.</p>
+          <ul class="contact-lines">
+            {% if s.address %}<li><i aria-hidden="true">&#9873;</i><div><span>UK office</span>{{ s.address }}</div></li>{% endif %}
+            {% if s.second_office %}<li><i aria-hidden="true">&#9873;</i><div><span>Regional office</span>{{ s.second_office }}</div></li>{% endif %}
+            {% if s.email %}<li><i aria-hidden="true">&#9993;</i><div><span>Email</span><a href="mailto:{{ s.email }}">{{ s.email }}</a></div></li>{% endif %}
+            {% if s.phone %}<li><i aria-hidden="true">&#9742;</i><div><span>Telephone</span><a href="tel:{{ s.phone|cut:' ' }}">{{ s.phone }}</a></div></li>{% endif %}
+            {% if s.opening_hours %}<li><i aria-hidden="true">&#9201;</i><div><span>Hours</span>{{ s.opening_hours }}</div></li>{% endif %}
+          </ul>
+        </aside>
+      {% endwith %}
+    </div>
+  </section>
+
+  {% for block in page.body %}{% include_block block %}{% endfor %}
+{% endblock %}

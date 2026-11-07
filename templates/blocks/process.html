@@ -1,0 +1,35 @@
+<section class="section section--{{ value.tone }}">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value split=True %}
+
+    {% if value.style == 'cycle' and value.steps|length == 6 %}
+      {% include "blocks/_process_cycle.html" %}
+    {% elif value.style == 'track' %}
+      <div class="track">
+        <div class="track__rule" aria-hidden="true"></div>
+        <div class="track__fill" aria-hidden="true"></div>
+        {% for step in value.steps %}
+          <article class="track__step" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+            <span class="track__dot" aria-hidden="true">{{ forloop.counter }}</span>
+            {% if step.meta %}<p class="track__meta">{{ step.meta }}</p>{% endif %}
+            <h3>{{ step.title }}</h3>
+            {% if step.text %}<p>{{ step.text }}</p>{% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="steps">
+        {% for step in value.steps %}
+          <div class="steps__row" data-reveal style="--d:{{ forloop.counter0 }}0ms">
+            <span class="steps__n" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
+            <div class="steps__body">
+              {% if step.meta %}<p class="steps__meta">{{ step.meta }}</p>{% endif %}
+              <h3>{{ step.title }}</h3>
+              {% if step.text %}<p>{{ step.text }}</p>{% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

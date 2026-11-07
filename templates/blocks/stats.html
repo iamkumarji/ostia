@@ -1,0 +1,13 @@
+<section class="section section--{{ value.tone }}">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value split=True %}
+    <div class="statrow">
+      {% for item in value.items %}
+        <div class="statrow__cell" data-reveal style="--d:{{ forloop.counter0 }}00ms">
+          <span class="statrow__value" data-count="{{ item.value }}">{{ item.value }}</span>
+          <span class="statrow__label">{{ item.label }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

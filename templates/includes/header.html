@@ -1,0 +1,78 @@
+{% load wagtailcore_tags site_tags %}
+{% main_menu as menu_pages %}
+{% site_root as root %}
+{% with s=settings.core.SiteSettings %}
+
+<div class="topbar">
+  <div class="shell topbar__inner">
+    <div class="topbar__group">
+      {% if s.address %}<span class="loc"><span aria-hidden="true">&#9679;</span>{{ s.address }}</span>{% endif %}
+    </div>
+    <div class="topbar__group">
+      {% if s.email %}<a href="mailto:{{ s.email }}">{{ s.email }}</a>{% endif %}
+      {% if s.phone %}<a href="tel:{{ s.phone|cut:' ' }}">{{ s.phone }}</a>{% endif %}
+      {% if s.client_login_url %}<a href="{{ s.client_login_url }}">Client login</a>{% endif %}
+    </div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="{% if root %}{% pageurl root %}{% else %}/{% endif %}">
+      {% include "includes/logo.html" %}
+      <span class="brand__name">Ostia Management<small>Certification Body</small></span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <ul class="nav__list">
+        {% for item in menu_pages %}
+          {% children_of item as kids %}
+          <li class="nav__item">
+            <a class="nav__link" href="{% pageurl item %}" {% if item.id == page.id %}aria-current="page"{% endif %}>
+              {{ item.title }}
+              {% if kids %}<svg class="nav__caret" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>{% endif %}
+            </a>
+            {% if kids %}
+              <ul class="nav__panel {% if kids|length > 5 %}nav__panel--wide{% endif %}">
+                {% for kid in kids %}
+                  <li>
+                    <a href="{% pageurl kid %}">
+                      {{ kid.title }}
+                      {% if kid.system_name %}<small>{{ kid.system_name }}</small>{% endif %}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <a class="btn btn--primary btn--sm header-cta" href="/contact/" data-magnetic>
+      Get in touch <span class="btn__arrow" aria-hidden="true">&#8599;</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <ul>
+    {% for item in menu_pages %}
+      {% children_of item as kids %}
+      <li>
+        <a href="{% pageurl item %}">{{ item.title }}</a>
+        {% if kids %}
+          <ul>
+            {% for kid in kids %}<li><a href="{% pageurl kid %}">{{ kid.title }}</a></li>{% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  <a class="btn btn--primary" href="/contact/" style="margin-top:26px">Get in touch</a>
+</div>
+{% endwith %}

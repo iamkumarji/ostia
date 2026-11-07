@@ -1,0 +1,22 @@
+{% load wagtailcore_tags site_tags %}
+{% featured_standards value.limit value.featured_only as standards %}
+<section class="section section--{{ value.tone }}">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value split=True %}
+    <div class="standards">
+      {% for std in standards %}
+        <a class="std accent-{{ std.accent }}" href="{% pageurl std %}" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+          <div class="std__top">
+            <span class="std__code">{{ std.code }}</span>
+            <span class="arrow-btn" aria-hidden="true">&#8599;</span>
+          </div>
+          {% if std.system_name %}<span class="std__system">{{ std.system_name }}</span>{% endif %}
+          <p>{{ std.summary|truncatewords:20 }}</p>
+          <div class="std__foot">
+            {% if std.accredited %}<span class="tag-ok">UAF accredited</span>{% else %}<span></span>{% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,6 @@
+<section class="strip">
+  <p class="strip__label">Management system standards we audit and certify</p>
+  <div class="strip__track" style="--marquee-duration:{% if value.speed == 'slow' %}56s{% elif value.speed == 'fast' %}26s{% else %}40s{% endif %}" aria-hidden="true">
+    {% for item in value.items %}<span class="strip__item">{{ item }}</span>{% endfor %}
+  </div>
+</section>

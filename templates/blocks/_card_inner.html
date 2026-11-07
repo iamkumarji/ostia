@@ -1,0 +1,9 @@
+{% if style == 'numbered' %}
+  <span class="card__num">{{ index|stringformat:"02d" }}</span>
+{% else %}
+  {% if card.icon %}<div class="card__icon">{{ card.icon }}</div>{% endif %}
+  {% if card.badge %}<span class="card__badge">{{ card.badge }}</span>{% endif %}
+{% endif %}
+<h3>{{ card.title }}</h3>
+{% if card.text %}<p>{{ card.text }}</p>{% endif %}
+{% if linked %}<span class="card__more">Learn more <span aria-hidden="true">&#8599;</span></span>{% endif %}

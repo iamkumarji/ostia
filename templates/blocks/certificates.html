@@ -1,0 +1,22 @@
+<section class="section section--{{ value.tone }}">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value split=True %}
+    <div class="certs">
+      {% for cert in value.items %}
+        <article class="cert" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+          <div class="cert__head">
+            <div class="seal" aria-hidden="true">&#9733;</div>
+            <span class="cert__no">{{ cert.number }}</span>
+          </div>
+          <h3>{{ cert.standard }}</h3>
+          <p class="cert__holder">{{ cert.holder }}</p>
+          {% if cert.scope %}<p style="font-size:.88rem;color:var(--body);margin:0 0 14px">{{ cert.scope }}</p>{% endif %}
+          <div class="cert__dates">
+            <div><span>Issued</span><strong>{{ cert.issued }}</strong></div>
+            <div><span>Expires</span><strong>{{ cert.expires }}</strong></div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

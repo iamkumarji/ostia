@@ -1,0 +1,55 @@
+{% comment %}Six-step certification cycle: steps 1-4 happen once and feed a loop of surveillance and
+recertification. data-upto marks the step at which a part of the diagram lights up.{% endcomment %}
+<div class="cycle" data-cycle>
+  <div class="cycle__dial" aria-hidden="true">
+    <div class="cycle__map">
+      <svg viewBox="0 0 400 500" focusable="false">
+        <defs>
+          <marker id="cycle-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M1 1 L8 5 L1 9" fill="none" stroke="context-stroke" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </marker>
+        </defs>
+
+        <path class="cycle__base" d="M50 62 H300 C320 62 330 78 330 98 V320 A130 130 0 0 1 200 450 A130 130 0 0 1 70 320 A130 130 0 0 1 200 190" />
+        <path class="cycle__return" data-upto="6" marker-end="url(#cycle-arrow)" d="M200 190 A130 130 0 0 1 328 297" />
+
+        <path class="cycle__seg" data-upto="2" pathLength="1" d="M50 62 H130" />
+        <path class="cycle__seg" data-upto="3" pathLength="1" d="M130 62 H210" />
+        <path class="cycle__seg" data-upto="4" pathLength="1" d="M210 62 H290" />
+        <path class="cycle__seg" data-upto="5" pathLength="1" d="M290 62 H300 C320 62 330 78 330 98 V320 A130 130 0 0 1 200 450 A130 130 0 0 1 70 320" />
+        <path class="cycle__seg" data-upto="6" pathLength="1" d="M70 320 A130 130 0 0 1 200 190" />
+
+        <text class="cycle__label" x="33" y="28">Initial certification</text>
+        <text class="cycle__label" x="200" y="492" text-anchor="middle">Year 1</text>
+        <text class="cycle__label" x="36" y="325" text-anchor="end">Year 2</text>
+        <text class="cycle__label" x="200" y="155" text-anchor="middle">Year 3</text>
+        <text class="cycle__label" x="238" y="178">Next cycle</text>
+
+        <g class="cycle__node" data-upto="1" transform="translate(50 62)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">1</text></g>
+        <g class="cycle__node" data-upto="2" transform="translate(130 62)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">2</text></g>
+        <g class="cycle__node" data-upto="3" transform="translate(210 62)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">3</text></g>
+        <g class="cycle__node" data-upto="4" transform="translate(290 62)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">4</text></g>
+        <g class="cycle__node" data-upto="5" transform="translate(200 450)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">5</text></g>
+        <g class="cycle__node" data-upto="5" transform="translate(70 320)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">5</text></g>
+        <g class="cycle__node" data-upto="6" transform="translate(200 190)"><circle class="cycle__halo" r="17" /><circle class="cycle__disc" r="17" /><text y="6" text-anchor="middle">6</text></g>
+      </svg>
+      <div class="cycle__hub">
+        <span class="cycle__hub-phase" data-cycle-phase>Three-year cycle</span>
+        <span class="cycle__hub-count" data-cycle-count></span>
+      </div>
+    </div>
+  </div>
+
+  <ol class="cycle__steps">
+    {% for step in value.steps %}
+      <li class="cycle__step" data-phase="{{ step.meta }}">
+        <span class="cycle__n" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
+        <div class="cycle__body">
+          {% ifchanged step.meta %}{% if step.meta %}<p class="cycle__phase">{{ step.meta }}</p>{% endif %}{% endifchanged %}
+          <h3>{{ step.title }}</h3>
+          {% if step.text %}<p>{{ step.text }}</p>{% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+</div>

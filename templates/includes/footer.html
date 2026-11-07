@@ -1,0 +1,59 @@
+{% load wagtailcore_tags site_tags %}
+{% main_menu as menu_pages %}
+{% site_root as root %}
+{% featured_standards 8 True as footer_standards %}
+{% with s=settings.core.SiteSettings %}
+<footer class="site-footer">
+  <div class="dot-grid" style="width:260px;height:260px;top:-60px;right:-60px;color:#fff;opacity:.08"></div>
+  <div class="shell">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="{% if root %}{% pageurl root %}{% else %}/{% endif %}">
+          {% include "includes/logo.html" %}
+          <span class="brand__name">Ostia Management<small>Certification Body</small></span>
+        </a>
+        <p class="footer-blurb">{{ s.footer_blurb|default:"Ostia Management is an independent certification body providing audit and certification of management systems in accordance with ISO/IEC 17021-1:2015." }}</p>
+        <div class="social">
+          {% if s.linkedin_url %}<a href="{{ s.linkedin_url }}" aria-label="LinkedIn">in</a>{% endif %}
+          {% if s.facebook_url %}<a href="{{ s.facebook_url }}" aria-label="Facebook">f</a>{% endif %}
+          {% if s.youtube_url %}<a href="{{ s.youtube_url }}" aria-label="YouTube">&#9654;</a>{% endif %}
+        </div>
+      </div>
+
+      <div>
+        <h4>Certification</h4>
+        <ul>
+          {% for std in footer_standards %}
+            <li><a href="{% pageurl std %}">{{ std.code }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <ul>
+          {% for item in menu_pages %}
+            <li><a href="{% pageurl item %}">{{ item.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get in touch</h4>
+        <ul>
+          {% if s.address %}<li>{{ s.address }}</li>{% endif %}
+          {% if s.second_office %}<li>{{ s.second_office }}</li>{% endif %}
+          {% if s.email %}<li><a href="mailto:{{ s.email }}">{{ s.email }}</a></li>{% endif %}
+          {% if s.phone %}<li><a href="tel:{{ s.phone|cut:' ' }}">{{ s.phone }}</a></li>{% endif %}
+          {% if s.opening_hours %}<li>{{ s.opening_hours }}</li>{% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-base">
+      <span>&copy; {% now "Y" %} Ostia Management. All rights reserved.</span>
+      <span>{{ s.legal_line|default:"Accredited to ISO/IEC 17021-1:2015." }}</span>
+    </div>
+  </div>
+</footer>
+{% endwith %}

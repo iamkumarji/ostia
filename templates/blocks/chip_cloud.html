@@ -1,0 +1,8 @@
+<section class="section section--{{ value.tone }}">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value center=True %}
+    <div class="chips" style="justify-content:center" data-reveal>
+      {% for chip in value.chips %}<span class="chip">{{ chip }}</span>{% endfor %}
+    </div>
+  </div>
+</section>

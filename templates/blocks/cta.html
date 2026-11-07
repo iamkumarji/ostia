@@ -1,0 +1,20 @@
+{% load site_tags %}
+<section class="section section--paper">
+  <div class="shell">
+    <div class="cta" data-reveal>
+      <div class="dots" aria-hidden="true"></div>
+      <h2 data-split>{{ value.heading }}</h2>
+      {% if value.text %}<p>{{ value.text }}</p>{% endif %}
+      <div class="btn-row">
+        {% if value.button.label %}
+          {% link_url value.button as burl %}
+          <a class="btn btn--orange" href="{{ burl|default:'#' }}" data-magnetic>{{ value.button.label }} <span class="btn__arrow" aria-hidden="true">&#8599;</span></a>
+        {% endif %}
+        {% if value.secondary.label %}
+          {% link_url value.secondary as surl %}
+          <a class="btn btn--outline" href="{{ surl|default:'#' }}">{{ value.secondary.label }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

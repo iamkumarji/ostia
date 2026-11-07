@@ -1,0 +1,41 @@
+{% load wagtailcore_tags wagtailimages_tags site_tags %}
+<section class="section section--{{ value.tone }}">
+  <div class="shell">
+    <div class="split {% if value.reverse %}split--flip{% endif %}">
+      <div class="split__copy">
+        {% if value.eyebrow %}<p class="eyebrow" data-reveal>{{ value.eyebrow }}</p>{% endif %}
+        {% if value.heading %}<h2 data-split>{{ value.heading }}</h2>{% endif %}
+        {% if value.intro %}<p class="lede" data-reveal style="--d:100ms">{{ value.intro }}</p>{% endif %}
+        {% if value.body %}<div class="prose" data-reveal style="--d:140ms">{{ value.body|richtext }}</div>{% endif %}
+
+        {% if value.points %}
+          <ul class="checks" data-reveal style="--d:200ms">
+            {% for point in value.points %}
+              <li><span class="tick" aria-hidden="true">&#10003;</span>{{ point }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if value.cta.label %}
+          {% link_url value.cta as curl %}
+          <div class="btn-row"><a class="btn btn--primary" href="{{ curl|default:'#' }}" data-magnetic>{{ value.cta.label }} <span class="btn__arrow" aria-hidden="true">&#8599;</span></a></div>
+        {% endif %}
+      </div>
+
+      <div class="split__media stage" data-reveal style="--d:120ms">
+        <div class="dots stage__dots" aria-hidden="true"></div>
+        <div class="stage__frame" data-clip>
+          {% if value.image %}{% image value.image fill-800x680 alt="" data-par="0.05" %}{% endif %}
+        </div>
+
+        <span class="float-card float-card--tag float-card--a bob" aria-hidden="true">
+          <i>&#10003;</i> Verified and result driven
+        </span>
+        <div class="float-card float-card--c">
+          <span class="bignum" data-count="346">346</span>
+          <small style="display:block;margin-top:2px">Certified organisations supported</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

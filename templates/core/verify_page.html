@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+  {% include "includes/page_header.html" %}
+
+  <section class="section section--paper">
+    <div class="shell">
+      {% if page.help_text_above_form %}<p class="lede" style="margin-bottom:18px">{{ page.help_text_above_form }}</p>{% endif %}
+
+      <form class="verify-form" method="get" action="{% pageurl page %}" data-reveal>
+        <label class="skip-link" for="certificate-number">Certificate number</label>
+        <input id="certificate-number" type="search" name="number" value="{{ query }}" placeholder="e.g. OML-00012-Q" autocomplete="off" required>
+        <button class="btn btn--primary" type="submit">Verify <span class="btn__arrow" aria-hidden="true">&#8599;</span></button>
+      </form>
+
+      {% if searched %}
+        {% if certificate %}
+          <div class="verify-result">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+              <h2 style="margin:0;font-size:1.6rem">{{ certificate.standard }}</h2>
+              <span class="status-pill{% if certificate.status == 'suspended' %} status-pill--warn{% elif certificate.status != 'active' %} status-pill--bad{% endif %}">{{ certificate.get_status_display }}</span>
+            </div>
+            <dl>
+              <dt>Certificate number</dt><dd>{{ certificate.number }}</dd>
+              <dt>Certified organisation</dt><dd>{{ certificate.holder }}</dd>
+              {% if certificate.scope %}<dt>Scope</dt><dd>{{ certificate.scope }}</dd>{% endif %}
+              {% if certificate.site_address %}<dt>Certified site</dt><dd>{{ certificate.site_address }}</dd>{% endif %}
+              <dt>Issued</dt><dd>{{ certificate.issued|date:"j M Y" }}</dd>
+              <dt>Valid until</dt><dd>{{ certificate.expires|date:"j M Y" }}</dd>
+            </dl>
+          </div>
+        {% else %}
+          <div class="verify-result verify-result--empty">
+            <h2 style="margin:0 0 10px;font-size:1.4rem">No certificate found</h2>
+            <p style="margin:0;color:var(--body)">We hold no record for &ldquo;{{ query }}&rdquo;. Check the number as printed on the certificate, or <a href="/contact/">contact us</a> and we will confirm the status for you.</p>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </section>
+
+  {% for block in page.body %}{% include_block block %}{% endfor %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% load wagtailimages_tags %}
+<section class="section section--paper">
+  <div class="shell">
+    {% include "blocks/_heading.html" with value=value split=True %}
+    <div class="people">
+      {% for m in value.members %}
+        <article class="person" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+          {% if m.image %}
+            {% image m.image fill-560x640 alt="{{ m.name }}" %}
+          {% else %}
+            <div class="person__blank" aria-hidden="true">{{ m.name|slice:":1" }}</div>
+          {% endif %}
+          <div class="person__bar">
+            <span>
+              <strong>{{ m.name }}</strong>
+              {% if m.role %}<small>{{ m.role }}</small>{% endif %}
+            </span>
+            <span class="arrow-btn arrow-btn--orange" aria-hidden="true">&#8599;</span>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,78 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% if value.style == 'panel' %}
+  <section class="section section--{{ value.tone }}">
+    <div class="shell">
+      <div class="panel">
+        <div class="dots" aria-hidden="true"></div>
+        {% include "blocks/_heading.html" with value=value split=True %}
+        <div class="cards cards--panel">
+          {% for card in value.cards %}
+            {% if card.page %}{% pageurl card.page as card_url %}{% else %}{% firstof card.url "" as card_url %}{% endif %}
+            {% if card_url %}
+              <a class="card" href="{{ card_url }}" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+                {% include "blocks/_card_inner.html" with card=card style=value.style index=forloop.counter linked=True %}
+              </a>
+            {% else %}
+              <article class="card" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+                {% include "blocks/_card_inner.html" with card=card style=value.style index=forloop.counter linked=False %}
+              </article>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% elif value.style == 'tabs' %}
+  <section class="section section--{{ value.tone }}">
+    <div class="shell">
+      {% include "blocks/_heading.html" with value=value split=True %}
+      <div data-tabs>
+        <div class="tabs__list" role="tablist">
+          {% for card in value.cards %}
+            <button class="tabs__btn" type="button" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">{{ card.badge|default:card.title }}</button>
+          {% endfor %}
+        </div>
+        {% for card in value.cards %}
+          <div class="tabs__panel {% if forloop.first %}is-active{% endif %}" role="tabpanel">
+            <div>
+              {% if card.icon %}<div class="card__icon">{{ card.icon }}</div>{% endif %}
+              <h3 style="font-size:1.7rem">{{ card.title }}</h3>
+              {% if card.text %}<p style="color:var(--body)">{{ card.text }}</p>{% endif %}
+              {% if card.page %}
+                <p style="margin-top:18px"><a class="text-link" href="{% pageurl card.page %}">Read more <span aria-hidden="true">&#8599;</span></a></p>
+              {% elif card.url %}
+                <p style="margin-top:18px"><a class="text-link" href="{{ card.url }}">Read more <span aria-hidden="true">&#8599;</span></a></p>
+              {% endif %}
+            </div>
+            <div class="stage__frame" style="aspect-ratio:4/3.2">
+              {% if card.image %}{% image card.image fill-720x560 alt="" %}{% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% else %}
+  <section class="section section--{{ value.tone }}">
+    <div class="shell">
+      {% include "blocks/_heading.html" with value=value split=True %}
+      <div class="cards cards--{{ value.style }}">
+        {% for card in value.cards %}
+          {% if card.page %}{% pageurl card.page as card_url %}{% else %}{% firstof card.url "" as card_url %}{% endif %}
+          {% if card_url %}
+            <a class="card" href="{{ card_url }}" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+              {% include "blocks/_card_inner.html" with card=card style=value.style index=forloop.counter linked=True %}
+            </a>
+          {% else %}
+            <article class="card" data-reveal style="--d:{{ forloop.counter0 }}20ms">
+              {% include "blocks/_card_inner.html" with card=card style=value.style index=forloop.counter linked=False %}
+            </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}

@@ -1,0 +1,67 @@
+{% load wagtailcore_tags wagtailimages_tags site_tags %}
+<section class="hero">
+  <div class="shell hero__inner">
+    <div class="hero__copy">
+      {% if value.eyebrow %}
+        <span class="pill" data-reveal><i aria-hidden="true">&#10003;</i>{{ value.eyebrow }}</span>
+      {% endif %}
+
+      <h1 class="hero__title" data-split>
+        {% with parts=value.heading|rotating_split %}
+          {{ parts.0 }}{% if value.rotating_words %}<span class="mark">{{ value.rotating_words.0 }}</span>{% endif %}{{ parts.1 }}
+        {% endwith %}
+      </h1>
+
+      {% if value.intro %}<p class="hero__intro" data-reveal style="--d:140ms">{{ value.intro }}</p>{% endif %}
+
+      <div class="btn-row" data-reveal style="--d:220ms">
+        {% if value.primary_cta.label %}
+          {% link_url value.primary_cta as purl %}
+          <a class="btn btn--primary" href="{{ purl|default:'#' }}" data-magnetic>{{ value.primary_cta.label }} <span class="btn__arrow" aria-hidden="true">&#8599;</span></a>
+        {% endif %}
+        {% if value.secondary_cta.label %}
+          {% link_url value.secondary_cta as surl %}
+          <a class="btn btn--outline" href="{{ surl|default:'#' }}">{{ value.secondary_cta.label }}</a>
+        {% endif %}
+      </div>
+
+      {% if value.highlights %}
+        <ul class="hero__proof" data-reveal style="--d:300ms">
+          {% for item in value.highlights %}
+            <li><span class="tick" aria-hidden="true">&#10003;</span>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% include "includes/doodle_arrow.html" with extra_class="hero__doodle" %}
+    </div>
+
+    <div class="stage" data-reveal style="--d:160ms">
+      <div class="dots stage__dots" aria-hidden="true"></div>
+
+      <div class="stage__frame" data-clip>
+        {% if value.image %}
+          {% image value.image fill-760x800 alt="" data-par="0.06" %}
+        {% endif %}
+      </div>
+
+      <span class="float-card float-card--tag float-card--a bob" aria-hidden="true">
+        <i>&#10003;</i> UAF accredited &middot; CAB ID 107
+      </span>
+
+      <div class="float-card float-card--b bob bob--slow">
+        <h4>Audit readiness</h4>
+        <div class="meter" style="--meter:86%"><span></span></div>
+        <small>Stage 1 complete &middot; 86%</small>
+      </div>
+
+      <div class="float-card float-card--c">
+        <div class="avatars" aria-hidden="true">
+          <b>Q</b><b>E</b><b>S</b><b>I</b>
+        </div>
+        <span class="bignum" data-count="30+">30+</span>
+        <small style="display:block;margin-top:2px">Standards and schemes certified</small>
+      </div>
+    </div>
+  </div>
+</section>

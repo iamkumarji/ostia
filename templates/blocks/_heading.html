@@ -1,0 +1,17 @@
+{% if value.eyebrow or value.heading or value.intro %}
+  {% if split %}
+    <div class="section-head section-head--split">
+      <div>
+        {% if value.eyebrow %}<p class="eyebrow" data-reveal>{{ value.eyebrow }}</p>{% endif %}
+        {% if value.heading %}<h2 data-split>{{ value.heading }}</h2>{% endif %}
+      </div>
+      {% if value.intro %}<p class="lede" data-reveal style="--d:120ms">{{ value.intro }}</p>{% endif %}
+    </div>
+  {% else %}
+    <div class="section-head {% if center %}section-head--center{% endif %}">
+      {% if value.eyebrow %}<p class="eyebrow" data-reveal>{{ value.eyebrow }}</p>{% endif %}
+      {% if value.heading %}<h2 data-split>{{ value.heading }}</h2>{% endif %}
+      {% if value.intro %}<p class="lede" data-reveal style="--d:120ms">{{ value.intro }}</p>{% endif %}
+    </div>
+  {% endif %}
+{% endif %}

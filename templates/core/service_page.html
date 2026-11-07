@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags site_tags %}
+
+{% block content %}
+  <section class="page-head page-head--dark">
+    {% if page.image %}
+      <div class="page-head__art" aria-hidden="true">{% image page.image fill-900x700 alt="" %}</div>
+    {% endif %}
+    <div class="shell page-head__inner">
+      <ul class="crumbs">
+        <li><a href="/">Home</a></li>
+        <li><a href="{% pageurl page.get_parent %}">{{ page.get_parent.title }}</a></li>
+        <li>{{ page.title }}</li>
+      </ul>
+      {% if page.system_name %}<p class="eyebrow">{{ page.system_name }}</p>{% endif %}
+      <h1 data-split>{{ page.title }}</h1>
+      <p data-reveal style="--d:120ms">{{ page.summary }}</p>
+      <div class="btn-row" data-reveal style="--d:200ms">
+        <a class="btn btn--orange" href="/contact/" data-magnetic>Apply for certification <span class="btn__arrow" aria-hidden="true">&#8599;</span></a>
+        {% if page.accredited %}<span class="tag-ok" style="align-self:center">UAF accredited scope</span>{% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="shell layout">
+      <div>
+        {% if page.overview %}<div class="prose" data-reveal>{{ page.overview|richtext }}</div>{% endif %}
+
+        {% if page.benefit_list %}
+          <h2 style="margin-top:1.8em" data-split>What certification delivers</h2>
+          <ul class="benefits" data-reveal>
+            {% for benefit in page.benefit_list %}
+              <li><span class="tick" aria-hidden="true">&#10003;</span>{{ benefit }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      <aside class="sidebar">
+        <div class="side-card side-card--dark">
+          <h3>Make an enquiry</h3>
+          <p style="font-size:.93rem;margin-bottom:18px">Tell us your scope and sites, and we will send a quotation and audit plan.</p>
+          <a class="btn btn--orange btn--sm" href="/contact/">Get in touch <span class="btn__arrow" aria-hidden="true">&#8599;</span></a>
+        </div>
+
+        {% if related %}
+          <div class="side-card">
+            <h3>Related schemes</h3>
+            <ul class="side-list">
+              {% for item in related %}<li><a href="{% pageurl item %}">{{ item.code }}</a></li>{% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <div class="side-card">
+          <h3>All certification</h3>
+          <ul class="side-list">
+            {% featured_standards 8 True as side_standards %}
+            {% for item in side_standards %}<li><a href="{% pageurl item %}">{{ item.code }}</a></li>{% endfor %}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {% for block in page.body %}{% include_block block %}{% endfor %}
+{% endblock %}

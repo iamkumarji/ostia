@@ -5,6 +5,7 @@ command is the single source of truth for the launch content.
 
     python manage.py seed_site
 """
+import zlib
 from datetime import date
 
 from django.core.management.base import BaseCommand
@@ -33,6 +34,45 @@ from home.models import HomePage
 def img(title):
     """Look a photograph up by title; returns None when import_photos has not run."""
     return Image.objects.filter(title=title).first()
+
+
+# Photographs used when a page has no picture of its own. Rotated by a stable
+# hash of the slug so the choice is deterministic across re-seeds, and so the
+# pages vary instead of all sharing a single image.
+STOCK_PHOTOS = [
+    "office", "audit", "engineer-lab", "factory", "workspace", "team-meeting",
+    "server", "training-room", "consultancy", "whiteboard", "team",
+]
+
+
+def photo_for(slug):
+    """A stable, varied photograph for any page that names none."""
+    if not slug:
+        return None
+    return img(STOCK_PHOTOS[zlib.crc32(slug.encode()) % len(STOCK_PHOTOS)])
+
+
+def backfill_headers():
+    """Give every page that renders a header photograph one.
+
+    Pages that choose their own above keep it; this only fills what is still
+    blank, so no page renders with an empty header frame. ServicePage is
+    skipped: its template uses `image`, not `header_image`.
+    """
+    filled = 0
+    for page in Page.objects.all().specific():
+        if isinstance(page, ServicePage) or not hasattr(page, "header_image"):
+            continue
+        if page.header_image_id:
+            continue
+        photo = photo_for(page.slug)
+        if photo is None:
+            continue
+        page.header_image = photo
+        page.save()
+        page.save_revision().publish()
+        filled += 1
+    return filled
 
 
 def hero(**kwargs):
@@ -773,7 +813,7 @@ def home_body():
 
 def build_service(index, data):
     # Photos are titled after the standard family, e.g. iso-9001-2015 -> iso-9001.
-    photo = img("-".join(data["slug"].split("-")[:2])) or img("office")
+    photo = img("-".join(data["slug"].split("-")[:2])) or photo_for(data["slug"])
     page = ServicePage(
         title=f"{data['code']} Certification",
         image=photo,
@@ -838,7 +878,7 @@ COMPLIANCE_PHOTOS = ["workspace", "engineer-lab", "server", "training-room", "wh
 def build_compliance(index, code, slug, category, system_name, summary, order=0):
     page = ServicePage(
         title=f"{code} Certification",
-        image=img(COMPLIANCE_PHOTOS[order % len(COMPLIANCE_PHOTOS)]),
+        image=img(COMPLIANCE_PHOTOS[order % len(COMPLIANCE_PHOTOS)]) or photo_for(slug),
         slug=slug,
         code=code,
         category=category,
@@ -914,7 +954,14 @@ class Command(BaseCommand):
         self._contact(home)
         self._certificates()
 
-        self.stdout.write(self.style.SUCCESS(f"Seeded {Page.objects.live().count()} live pages."))
+        filled = backfill_headers()
+
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Seeded {Page.objects.live().count()} live pages "
+                f"({filled} given a fallback header photograph)."
+            )
+        )
 
     # -- settings ---------------------------------------------------------
 

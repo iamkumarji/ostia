@@ -21,9 +21,19 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING(f"No such directory: {source}"))
             return
 
+        # Wagtail stores uploads in this same directory, so every import drops a
+        # copy of each photo back into the folder being scanned. Without this
+        # guard the next run imports those copies as new images, and the library
+        # grows on every re-seed.
+        already_stored = {
+            Path(name).name for name in Image.objects.values_list("file", flat=True)
+        }
+
         created = 0
         for path in sorted(source.glob("*.jpg")):
             title = path.stem
+            if path.name in already_stored:
+                continue
             if Image.objects.filter(title=title).exists():
                 continue
             with path.open("rb") as handle:

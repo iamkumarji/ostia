@@ -6,18 +6,105 @@ certification body site; the design, layout and interaction are original.
 
 ## Running it
 
-```bash
-.venv/Scripts/python.exe manage.py runserver 8010
+The site runs on **PostgreSQL**. Connection details come from the environment, with a `.env`
+file at the repository root read on startup (real environment variables win over the file):
+
+```
+POSTGRES_DB=ostia
+POSTGRES_USER=ostia
+POSTGRES_PASSWORD=...
+POSTGRES_HOST=127.0.0.1
+POSTGRES_PORT=5432
+WAGTAILADMIN_BASE_URL=http://192.168.1.8:8010
 ```
 
-Then open <http://localhost:8010/>. The Wagtail admin is at `/admin/`; create a login with
-`manage.py createsuperuser`.
+`.env` is gitignored — it holds the database password, so it never goes into the repository.
+
+First-time setup on a machine with PostgreSQL installed:
+
+```bash
+sudo -u postgres createuser --pwprompt ostia && sudo -u postgres createdb -O ostia ostia
+```
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+```
+
+```bash
+.venv/bin/python manage.py migrate
+```
+
+Then start it, binding to every interface so the site is reachable over the network:
+
+```bash
+.venv/bin/python manage.py runserver 0.0.0.0:8010
+```
+
+The Wagtail admin is at `/admin/`; create a login with `manage.py createsuperuser`.
 
 To rebuild the entire site tree from scratch at any point:
 
 ```bash
-.venv/Scripts/python.exe manage.py import_photos && .venv/Scripts/python.exe manage.py seed_site
+.venv/bin/python manage.py import_photos && .venv/bin/python manage.py seed_site
 ```
+
+`import_photos` reads `media/original_images/*.jpg`, which is gitignored and therefore absent from
+a fresh clone. Without it the tree still builds, but the photography slots come out empty; drop the
+JPEGs in before seeding to get the images back.
+
+The site expects eleven photographs, named after the title the seeder looks up:
+
+```
+audit  consultancy  engineer-lab  factory  office  server
+team  team-meeting  training-room  whiteboard  workspace
+```
+
+Only `*.jpg` is read — `.png`, `.jpeg` and `.webp` are skipped in silence. Any page that names no
+photograph of its own is given one from this set, chosen by a stable hash of its slug, so every
+page carries a header image and no two neighbours repeat.
+
+Note that Wagtail stores uploads in `media/original_images/` as well, so each import leaves a copy
+of every photo in the folder it just scanned. `import_photos` skips files it has already stored;
+without that guard the library doubles on every re-seed.
+
+### Running it as a service
+
+`manage.py runserver` is for development only. On this machine the site runs under Gunicorn as a
+systemd unit, `ostia.service`, which is enabled at boot and restarts on failure:
+
+```bash
+sudo systemctl status ostia
+```
+
+```bash
+sudo systemctl restart ostia
+```
+
+```bash
+journalctl -u ostia -f
+```
+
+The unit runs `ostia.settings.production` (`DEBUG` off), so it needs `SECRET_KEY`, `ALLOWED_HOSTS`
+and `CSRF_TRUSTED_ORIGINS` in `.env` alongside the database credentials. Add any new hostname or IP
+the site is reached on to both `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`, or Django will refuse the
+request and forms will return 403.
+
+There is no nginx in front of it. Collected static files are served by WhiteNoise, compressed and
+far-future cached, so **run `collectstatic` after changing anything under `static/`** or the change
+will not appear:
+
+```bash
+DJANGO_SETTINGS_MODULE=ostia.settings.production .venv/bin/python manage.py collectstatic --noinput
+```
+
+```bash
+sudo systemctl restart ostia
+```
+
+`/media/` is deliberately *not* handled by WhiteNoise. Wagtail writes image renditions there the
+first time a page renders them, and WhiteNoise only indexes files that exist at startup, so uploads
+would 404 until a restart. Django serves that prefix instead — correct, if slower than a real web
+server would be. Putting nginx in front is the upgrade path if the site ever faces real traffic.
 
 `seed_site` deletes everything under the Wagtail root and recreates it, so it is the single source
 of truth for the launch content. Editors' later changes in the admin would be lost by re-running it.

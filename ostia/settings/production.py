@@ -13,3 +13,20 @@ if os.environ.get("SECURE_SSL_REDIRECT", "").lower() == "true":
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
+# Serve collected static files straight from Gunicorn, so the site needs no
+# separate web server in front of it. Compression without a manifest: a missing
+# asset reference degrades to a 404 rather than breaking the whole page.
+MIDDLEWARE = [
+    *MIDDLEWARE,  # noqa: F405
+]
+MIDDLEWARE.insert(
+    MIDDLEWARE.index("django.middleware.security.SecurityMiddleware") + 1,
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+)
+
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+}
+WHITENOISE_MAX_AGE = 31536000

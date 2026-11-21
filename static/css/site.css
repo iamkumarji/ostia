@@ -1171,7 +1171,7 @@ strong {
 .cards {
   display: grid;
   gap: 22px;
-  grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(282px, 100%), 1fr));
 }
 
 .card {
@@ -1893,7 +1893,7 @@ strong {
 
 .certs {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
   gap: 24px;
 }
 
@@ -2013,7 +2013,7 @@ strong {
 
 .quotes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 22px;
 }
 
@@ -2549,7 +2549,7 @@ strong {
   padding: 0;
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
 }
 
 .benefits li {
@@ -2650,7 +2650,7 @@ strong {
   border-radius: var(--r-sm);
   background: var(--paper);
   font: inherit;
-  font-size: 0.97rem;
+  font-size: 1rem;
   color: var(--ink);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }

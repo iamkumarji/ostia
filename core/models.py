@@ -296,7 +296,7 @@ class ServicePage(HeaderMixin, Page):
     accent = models.CharField(max_length=20, choices=ACCENTS, default="violet")
     summary = models.TextField(help_text="One or two sentences used on cards and in the page header")
     accredited = models.BooleanField(
-        default=False, help_text="Tick when the scheme sits inside the UAF accredited scope"
+        default=False, help_text="Tick when the scheme sits inside the IAS accredited scope"
     )
     featured = models.BooleanField(default=False, help_text="Show on the home page and in the footer")
     image = image_field("Used in the page header, cards and the home page showcase")
@@ -344,7 +344,7 @@ class Certificate(models.Model):
         ("expired", "Expired"),
     ]
 
-    number = models.CharField(max_length=40, unique=True, help_text="e.g. OML-00012-Q")
+    number = models.CharField(max_length=40, unique=True, help_text="Exactly as printed on the certificate")
     holder = models.CharField(max_length=160)
     standard = models.CharField(max_length=80, help_text="e.g. ISO 9001:2015")
     scope = models.TextField(blank=True)

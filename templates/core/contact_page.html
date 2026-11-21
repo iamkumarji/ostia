@@ -19,7 +19,7 @@
           <h3>Talk to the team</h3>
           <p style="margin:0">Impartial advice on the right scheme for your business &mdash; no obligation.</p>
           <ul class="contact-lines">
-            {% if s.address %}<li><i aria-hidden="true">&#9873;</i><div><span>UK office</span>{{ s.address }}</div></li>{% endif %}
+            {% if s.address %}<li><i aria-hidden="true">&#9873;</i><div><span>Registered office</span>{{ s.address }}</div></li>{% endif %}
             {% if s.second_office %}<li><i aria-hidden="true">&#9873;</i><div><span>Regional office</span>{{ s.second_office }}</div></li>{% endif %}
             {% if s.email %}<li><i aria-hidden="true">&#9993;</i><div><span>Email</span><a href="mailto:{{ s.email }}">{{ s.email }}</a></div></li>{% endif %}
             {% if s.phone %}<li><i aria-hidden="true">&#9742;</i><div><span>Telephone</span><a href="tel:{{ s.phone|cut:' ' }}">{{ s.phone }}</a></div></li>{% endif %}

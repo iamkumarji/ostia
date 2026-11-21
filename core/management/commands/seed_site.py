@@ -271,7 +271,7 @@ STANDARDS = [
             "A risk assessment that reflects your actual threat landscape",
             "Controls selected and justified through a Statement of Applicability",
             "Stronger answers to client security questionnaires and audits",
-            "Supports obligations under UK GDPR and sector regulation",
+            "Supports obligations under applicable data protection and sector regulation",
             "Tested incident response and business continuity arrangements",
             "A recognised credential in enterprise and public sector tenders",
         ],
@@ -359,7 +359,7 @@ STANDARDS = [
             "associates, financial and commercial controls, gifts and hospitality rules, confidential reporting "
             "channels, and a compliance function with real authority.</p>"
             "<p>Certification offers independent evidence that proportionate procedures are in place &mdash; "
-            "relevant to organisations exposed to the UK Bribery Act 2010 and comparable legislation.</p>"
+            "relevant to organisations exposed to anti-bribery legislation in India and comparable international law.</p>"
         ),
         "benefits": [
             "A documented bribery risk assessment across operations and markets",
@@ -389,8 +389,8 @@ STANDARDS = [
             "<p>The standard requires an energy review, an energy baseline, energy performance indicators and "
             "objectives, alongside controls over design and procurement decisions that lock in consumption for "
             "years.</p>"
-            "<p>Certification supports cost reduction and carbon targets, and in the UK can contribute to "
-            "compliance routes such as ESOS.</p>"
+            "<p>Certification supports cost reduction and carbon targets, and can contribute to "
+            "national energy efficiency and reporting obligations.</p>"
         ),
         "benefits": [
             "A measured energy baseline and meaningful performance indicators",
@@ -404,16 +404,10 @@ STANDARDS = [
 ]
 
 COMPLIANCE_SCHEMES = [
-    ("ISO 22301", "iso-22301-certification", "governance", "Business Continuity Management System",
-     "Prepare for disruption, keep critical activities running and recover within agreed timeframes."),
-    ("ISO 20000-1", "iso-20000-1-certification", "security", "IT Service Management System",
-     "Deliver and improve IT services with defined service levels, change control and incident management."),
     ("ISO 31000", "iso-31000-certification", "governance", "Risk Management Guidelines",
      "Embed a consistent approach to identifying, evaluating and treating risk across the organisation."),
     ("ISO 41001:2018", "iso-41001-certification", "energy-assets", "Facility Management System",
      "Manage facilities and workplace services to a defined standard of performance and cost."),
-    ("ISO 55001", "iso-55001-certification", "energy-assets", "Asset Management System",
-     "Get value from physical assets across their whole life cycle, from acquisition to disposal."),
     ("ISO 39001", "iso-39001-certification", "health-safety", "Road Traffic Safety Management System",
      "Reduce death and serious injury arising from road traffic in your operations and supply chain."),
     ("ISO 20121", "iso-20121-certification", "environment", "Event Sustainability Management System",
@@ -525,7 +519,7 @@ CERT_CYCLE_STEPS = [
 def home_body():
     return [
         hero(
-            eyebrow="UAF accredited · ISO/IEC 17021-1:2015",
+            eyebrow="IAS accredited · ISO/IEC 17021-1:2015",
             heading="Certification your market can {word}",
             rotating_words=["trust.", "verify.", "rely on.", "check."],
             intro=(
@@ -536,24 +530,23 @@ def home_body():
             primary_cta={"label": "Apply for certification", "url": "/contact/"},
             secondary_cta={"label": "Explore schemes", "url": "/services/"},
             highlights=[
-                "Accredited by the United Accreditation Foundation",
-                "CAB ID 107",
-                "UK registered under the Companies Act 2006",
+                "Accredited by the International Accreditation Service (IAS)",
+                "",
+                "Registered in India under the Companies Act",
             ],
             image=img("team-meeting"),
         ),
         marquee(
             [
                 "ISO 9001", "ISO 14001", "ISO 45001", "ISO 27001", "ISO 22000", "ISO 13485",
-                "ISO 37001", "ISO 50001", "ISO 22301", "HACCP", "GMP", "RoHS", "GS Mark",
+                "ISO 37001", "HACCP", "GMP", "RoHS", "GS Mark",
             ],
             speed="medium",
         ),
         stats(
             [
-                ("30+", "Standards and schemes covered"),
-                ("6", "Schemes in our UAF accredited scope"),
-                ("2", "International offices"),
+                ("29", "Standards and schemes covered"),
+                ("6", "Schemes in our IAS accredited scope"),
                 ("100%", "Decisions made independently"),
             ],
             tone="tint",
@@ -564,7 +557,7 @@ def home_body():
             eyebrow="Who we are",
             heading="Independent by constitution, not by claim",
             body=(
-                "<p>Ostia Management Limited is an independent certification body established in the United "
+                "<p>Ostia Management Pvt. Ltd. is an independent certification body established in the United "
                 "Kingdom and registered under the Companies Act 2006. We operate in accordance with "
                 "ISO/IEC 17021-1:2015, the international standard for bodies providing audit and certification "
                 "of management systems.</p>"
@@ -573,7 +566,7 @@ def home_body():
                 "safety, medical devices, energy management and anti-bribery.</p>"
             ),
             points=[
-                "Accredited by the United Accreditation Foundation, an IAF MLA signatory",
+                "Accredited by the International Accreditation Service (IAS), a full member of IAF",
                 "Certification decisions taken by reviewers who did not audit",
                 "Auditors assigned on sector competence, never on availability alone",
                 "Fees never contingent on the outcome of an audit",
@@ -621,41 +614,6 @@ def home_body():
             intro=(
                 "Every step follows ISO/IEC 17021-1:2015. Before each audit, we confirm who will audit you "
                 "and what they will review. Afterwards, we explain what happens next."
-            ),
-        ),
-        certificates(
-            [
-                {
-                    "number": "OML-00012-Q",
-                    "standard": "ISO 9001:2015",
-                    "holder": "Specimen Holding Ltd.",
-                    "issued": "14 Mar 2024",
-                    "expires": "13 Mar 2027",
-                    "scope": "Design, manufacture and supply of precision engineered components.",
-                },
-                {
-                    "number": "OML-00041-E",
-                    "standard": "ISO 14001:2015",
-                    "holder": "Specimen Holding Ltd.",
-                    "issued": "02 May 2024",
-                    "expires": "01 May 2027",
-                    "scope": "Environmental management of manufacturing and distribution operations.",
-                },
-                {
-                    "number": "OML-00029-S",
-                    "standard": "ISO 45001:2018",
-                    "holder": "Specimen Holding Ltd.",
-                    "issued": "19 Jun 2024",
-                    "expires": "18 Jun 2027",
-                    "scope": "Occupational health and safety management across all operational sites.",
-                },
-            ],
-            tone="tint",
-            eyebrow="Specimen certificates",
-            heading="What you receive",
-            intro=(
-                "Every certificate carries a unique number, the certified scope and the accreditation mark. "
-                "Anyone can check its status on our verification page."
             ),
         ),
         cards(
@@ -715,7 +673,7 @@ def home_body():
                     "badge": "Accreditation",
                     "title": "Independently overseen",
                     "text": (
-                        "We are accredited by the United Accreditation Foundation, an IAF MLA signatory, and "
+                        "We are accredited by the International Accreditation Service (IAS), a full member of IAF, and "
                         "are assessed against ISO/IEC 17021-1:2015."
                     ),
                     "url": "/accreditation/",
@@ -840,7 +798,7 @@ def build_service(index, data):
                     "sites.</p>"
                 ),
                 points=[
-                    "UK established, operating internationally",
+                    "India established, operating internationally",
                     "Auditors experienced in your technical sector",
                     "A transparent process with written quotations up front",
                     "Impartiality protected by structure, not by promise",
@@ -967,21 +925,21 @@ class Command(BaseCommand):
 
     def _settings(self, site):
         settings_obj = SiteSettings.objects.first() or SiteSettings()
-        settings_obj.phone = "+44 (0)1580 123 456"
-        settings_obj.email = "info@ostiamanagement.co.uk"
-        settings_obj.address = "Unit 1 Vinehall Business Centre, Robertsbridge, England, TN32 5JW"
-        settings_obj.second_office = "Cairo, Egypt"
-        settings_obj.opening_hours = "Monday to Friday, 09:00 - 17:30 GMT"
-        settings_obj.client_login_url = "https://app.ostiamanagement.co.uk/"
-        settings_obj.auditor_login_url = "https://app.ostiamanagement.co.uk/auditor-login"
+        settings_obj.phone = "+91 9911275888"
+        settings_obj.email = "info@ostiamanagement.com"
+        settings_obj.address = "Plot No. 01A, R.K. Extension, Mohan Garden, Uttam Nagar, New Delhi 110059, India"
+        settings_obj.second_office = ""
+        settings_obj.opening_hours = ""
+        settings_obj.client_login_url = "https://app.ostiamanagement.com/"
+        settings_obj.auditor_login_url = "https://app.ostiamanagement.com/auditor-login"
         settings_obj.linkedin_url = "https://www.linkedin.com/"
         settings_obj.facebook_url = "https://www.facebook.com/"
         settings_obj.youtube_url = "https://www.youtube.com/"
         settings_obj.footer_blurb = (
-            "Ostia Management is an independent UK certification body providing audit and certification of "
+            "Ostia Management is an independent Indian certification body providing audit and certification of "
             "management systems in accordance with ISO/IEC 17021-1:2015."
         )
-        settings_obj.legal_line = "Accredited by the United Accreditation Foundation · CAB ID 107"
+        settings_obj.legal_line = "Accredited by the International Accreditation Service (IAS)"
         settings_obj.save()
 
     # -- pages ------------------------------------------------------------
@@ -994,28 +952,28 @@ class Command(BaseCommand):
             header_image=img("office"),
             eyebrow="Independently overseen",
             intro=(
-                "Ostia Management is independently accredited by the United Accreditation Foundation, an IAF "
+                "Ostia Management is independently accredited by the International Accreditation Service (IAS), an IAF "
                 "MLA signatory body, for management system certification under ISO/IEC 17021-1:2015."
             ),
             body=[
                 feature(
-                    eyebrow="United Accreditation Foundation",
+                    eyebrow="International Accreditation Service (IAS)",
                     heading="Accredited, and checkable",
                     body=(
                         "<p>Accreditation is the mechanism by which a certification body is itself audited. "
                         "It is what separates a certificate that carries weight from a printed document.</p>"
-                        "<p>Ostia Management holds accreditation from the United Accreditation Foundation "
-                        "(UAF) under CAB ID 107. UAF is a signatory to the IAF Multilateral Recognition "
+                        "<p>Ostia Management holds accreditation from the International Accreditation Service (IAS) "
+                        "(IAS) under . IAS is a signatory to the IAF Multilateral Recognition "
                         "Arrangement, which means certificates issued within our accredited scope are "
                         "recognised internationally.</p>"
-                        "<p>Our accreditation can be confirmed directly in the UAF directory. We encourage "
+                        "<p>Our accreditation can be confirmed directly in the IAS directory. We encourage "
                         "clients and their customers to check it.</p>"
                     ),
                     points=[
-                        "CAB ID 107 in the UAF directory",
+                        " in the IAS directory",
                         "Assessed against ISO/IEC 17021-1:2015",
                         "IAF MLA recognition for accredited schemes",
-                        "UK registered under the Companies Act 2006",
+                        "Registered in India under the Companies Act",
                     ],
                     tone="paper",
                 ),
@@ -1031,7 +989,7 @@ class Command(BaseCommand):
                     style="plain",
                     tone="tint",
                     eyebrow="Accredited scope",
-                    heading="Schemes covered by our UAF accreditation",
+                    heading="Schemes covered by our IAS accreditation",
                     intro=(
                         "These six standards sit inside the accredited scope. We also certify further "
                         "schemes outside it, and we always tell you which is which before you commit."
@@ -1044,7 +1002,7 @@ class Command(BaseCommand):
                     "and FCC.</p>"
                     "<p>These are audited to the same discipline by assessors competent in the relevant "
                     "technical area, with the same independent certification decision. They are not, however, "
-                    "covered by our UAF accreditation, and certificates issued under them do not carry the "
+                    "covered by our IAS accreditation, and certificates issued under them do not carry the "
                     "accreditation mark. We state this clearly at quotation stage so that you can judge "
                     "whether the scheme meets your customers' requirements.</p>",
                     tone="paper",
@@ -1083,7 +1041,7 @@ class Command(BaseCommand):
                         "We help organisations improve performance, manage risk, build the confidence of their "
                         "stakeholders, and implement recognised management system standards in a way that is "
                         "practical and cost-effective.</p>"
-                        "<p>Ostia Management Limited is registered under the UK Companies Act 2006 and "
+                        "<p>Ostia Management Pvt. Ltd. is registered under the Companies Act and "
                         "provides management system certification to manufacturers, suppliers and service "
                         "providers across many sectors and regions, alongside related training and assurance "
                         "services.</p>"
@@ -1092,16 +1050,14 @@ class Command(BaseCommand):
                         "Quality, environmental and occupational health and safety management",
                         "Information security, food safety and medical devices",
                         "Energy management and anti-bribery management",
-                        "Private and public sector clients in the UK and internationally",
+                        "Private and public sector clients in India and internationally",
                     ],
                     tone="paper",
                 ),
                 stats(
                     [
-                        ("30+", "Standards and schemes"),
-                        ("6", "UAF accredited schemes"),
-                        ("2", "International offices"),
-                        ("2006", "Registered under the Companies Act"),
+                        ("29", "Standards and schemes"),
+                        ("6", "IAS accredited schemes"),
                     ],
                     tone="tint",
                 ),
@@ -1379,7 +1335,7 @@ class Command(BaseCommand):
             body=[
                 text_block(
                     "<h2>Accredited and non-accredited schemes</h2>"
-                    "<p>The schemes on this page sit outside our UAF accredited scope. They are audited to "
+                    "<p>The schemes on this page sit outside our IAS accredited scope. They are audited to "
                     "the same discipline, by assessors competent in the relevant technical area, with the "
                     "same independent certification decision — but certificates issued under them do not "
                     "carry the accreditation mark.</p>"
@@ -1620,7 +1576,7 @@ class Command(BaseCommand):
                                 "text": (
                                     "If you remain dissatisfied, the matter may be escalated to our "
                                     "impartiality committee and, beyond that, to our accreditation body, the "
-                                    "United Accreditation Foundation."
+                                    "International Accreditation Service (IAS)."
                                 ),
                             },
                         ],
@@ -1635,8 +1591,8 @@ class Command(BaseCommand):
                         "happened, when, who was involved, what outcome you are seeking, and your contact "
                         "details. Appeals against a certification decision should be submitted within 30 days "
                         "of being notified of that decision.</p>"
-                        "<p>Email: <a href=\"mailto:info@ostiamanagement.co.uk\">info@ostiamanagement.co.uk</a></p>"
-                        "<p>Post: Unit 1 Vinehall Business Centre, Robertsbridge, England, TN32 5JW</p>",
+                        "<p>Email: <a href=\"mailto:info@ostiamanagement.com\">info@ostiamanagement.com</a></p>"
+                        "<p>Post: Plot No. 01A, R.K. Extension, Mohan Garden, Uttam Nagar, New Delhi 110059, India</p>",
                         tone="paper",
                     ),
                     document(
@@ -1666,7 +1622,7 @@ class Command(BaseCommand):
                 "Check the status of any certificate issued by Ostia Management. Enter the certificate "
                 "number exactly as it appears on the document."
             ),
-            help_text_above_form="Try OML-00012-Q to see how a valid certificate is reported.",
+            help_text_above_form="",
             body=[
                 text_block(
                     "<h2>Why verification matters</h2>"
@@ -1675,8 +1631,8 @@ class Command(BaseCommand):
                     "here whether a certificate we issued is valid, suspended, withdrawn or expired.</p>"
                     "<p>If the number you have been given returns no result, treat that as significant and "
                     "contact us. We will confirm the position in writing.</p>"
-                    "<p>Our own accreditation can be confirmed independently in the United Accreditation "
-                    "Foundation directory under CAB ID 107.</p>",
+                    "<p>Our own accreditation can be confirmed independently in the International "
+                    "Foundation directory under .</p>",
                     tone="paper",
                 ),
                 cta(
@@ -1703,13 +1659,13 @@ class Command(BaseCommand):
                 "Tell us the standard, your scope and how many sites you operate, and we will come back "
                 "with a quotation and a proposed audit programme."
             ),
-            from_address="website@ostiamanagement.co.uk",
-            to_address="info@ostiamanagement.co.uk",
+            from_address="website@ostiamanagement.com",
+            to_address="info@ostiamanagement.com",
             subject="Website enquiry",
             thank_you_text=(
                 "<p>Thank you for your enquiry. A member of the certification team will respond within one "
                 "working day.</p>"
-                "<p>If your enquiry is urgent, call us on +44 (0)1580 123 456.</p>"
+                "<p>If your enquiry is urgent, call us on +91 9911275888.</p>"
             ),
             body=[
                 faq(
@@ -1731,8 +1687,8 @@ class Command(BaseCommand):
                             "obligation.",
                         ),
                         (
-                            "Can you audit outside the UK?",
-                            "Yes. We operate internationally from our UK and regional offices, and we assign "
+                            "Can you audit outside India?",
+                            "Yes. We operate internationally from our New Delhi office, and we assign "
                             "auditors with the relevant language and sector competence.",
                         ),
                     ],
@@ -1782,28 +1738,8 @@ class Command(BaseCommand):
         return page
 
     def _certificates(self):
-        rows = [
-            ("OML-00012-Q", "Specimen Holding Ltd.", "ISO 9001:2015",
-             "Design, manufacture and supply of precision engineered components.",
-             "Unit 4 Brookfield Industrial Estate, Rotherham, S60 1AB",
-             date(2024, 3, 14), date(2027, 3, 13), "active"),
-            ("OML-00041-E", "Specimen Holding Ltd.", "ISO 14001:2015",
-             "Environmental management of manufacturing and distribution operations.",
-             "Unit 4 Brookfield Industrial Estate, Rotherham, S60 1AB",
-             date(2024, 5, 2), date(2027, 5, 1), "active"),
-            ("OML-00029-S", "Specimen Holding Ltd.", "ISO 45001:2018",
-             "Occupational health and safety management across all operational sites.",
-             "Unit 4 Brookfield Industrial Estate, Rotherham, S60 1AB",
-             date(2024, 6, 19), date(2027, 6, 18), "active"),
-            ("OML-00077-I", "Northgate Data Services Ltd.", "ISO/IEC 27001:2022",
-             "Provision of managed hosting and data processing services.",
-             "12 Carlisle Court, Leeds, LS1 4HT",
-             date(2023, 11, 8), date(2026, 11, 7), "active"),
-            ("OML-00103-F", "Harbour Foods Group Ltd.", "ISO 22000:2018",
-             "Processing, packing and cold storage of chilled ready meals.",
-             "Dockside Way, Hull, HU9 1PQ",
-             date(2024, 1, 22), date(2027, 1, 21), "suspended"),
-        ]
+        # Intentionally empty: real certificates are entered in the Wagtail admin.
+        rows = []
         for number, holder, standard, scope, site_address, issued, expires, status in rows:
             Certificate.objects.create(
                 number=number,

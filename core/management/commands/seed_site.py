@@ -6,7 +6,6 @@ command is the single source of truth for the launch content.
     python manage.py seed_site
 """
 import zlib
-from datetime import date
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -398,7 +397,7 @@ STANDARDS = [
             "Lower energy spend and reduced exposure to price volatility",
             "Evidence for carbon reduction and net-zero reporting",
             "Energy efficiency built into procurement and design decisions",
-            "Supports ESOS and similar regulatory schemes",
+            "Supports national energy reporting and regulatory schemes",
         ],
     },
 ]
@@ -531,7 +530,6 @@ def home_body():
             secondary_cta={"label": "Explore schemes", "url": "/services/"},
             highlights=[
                 "Accredited by the International Accreditation Service (IAS)",
-                "",
                 "Registered in India under the Companies Act",
             ],
             image=img("team-meeting"),
@@ -557,8 +555,8 @@ def home_body():
             eyebrow="Who we are",
             heading="Independent by constitution, not by claim",
             body=(
-                "<p>Ostia Management Pvt. Ltd. is an independent certification body established in the United "
-                "Kingdom and registered under the Companies Act 2006. We operate in accordance with "
+                "<p>Ostia Management Pvt. Ltd. is an independent certification body established in India "
+                "and registered under the Companies Act. We operate in accordance with "
                 "ISO/IEC 17021-1:2015, the international standard for bodies providing audit and certification "
                 "of management systems.</p>"
                 "<p>We serve manufacturers, suppliers and service providers across the private and public "
@@ -792,7 +790,7 @@ def build_service(index, data):
                 heading="Why certify with Ostia Management",
                 body=(
                     "<p>ISO publishes standards; it does not certify against them. That work is done by "
-                    "independent certification bodies. Ostia Management is established in the United Kingdom "
+                    "independent certification bodies. Ostia Management is established in India "
                     "and serves clients internationally, covering first-time certification, transfers from "
                     "another body, and the extension of an existing management system to new standards or "
                     "sites.</p>"
@@ -962,15 +960,15 @@ class Command(BaseCommand):
                     body=(
                         "<p>Accreditation is the mechanism by which a certification body is itself audited. "
                         "It is what separates a certificate that carries weight from a printed document.</p>"
-                        "<p>Ostia Management holds accreditation from the International Accreditation Service (IAS) "
-                        "(IAS) under . IAS is a signatory to the IAF Multilateral Recognition "
+                        "<p>Ostia Management holds accreditation from the International Accreditation Service "
+                        "(IAS). IAS is a signatory to the IAF Multilateral Recognition "
                         "Arrangement, which means certificates issued within our accredited scope are "
                         "recognised internationally.</p>"
                         "<p>Our accreditation can be confirmed directly in the IAS directory. We encourage "
                         "clients and their customers to check it.</p>"
                     ),
                     points=[
-                        " in the IAS directory",
+                        "Listed in the IAS directory",
                         "Assessed against ISO/IEC 17021-1:2015",
                         "IAF MLA recognition for accredited schemes",
                         "Registered in India under the Companies Act",
@@ -1027,7 +1025,7 @@ class Command(BaseCommand):
             header_image=img("team"),
             eyebrow="Driving quality transformation",
             intro=(
-                "An independent certification body established in the United Kingdom, operating under "
+                "An independent certification body established in India, operating under "
                 "ISO/IEC 17021-1:2015 and serving clients across the private and public sectors."
             ),
             body=[
@@ -1632,7 +1630,7 @@ class Command(BaseCommand):
                     "<p>If the number you have been given returns no result, treat that as significant and "
                     "contact us. We will confirm the position in writing.</p>"
                     "<p>Our own accreditation can be confirmed independently in the International "
-                    "Foundation directory under .</p>",
+                    "Accreditation Service (IAS) directory.</p>",
                     tone="paper",
                 ),
                 cta(
@@ -1738,16 +1736,4 @@ class Command(BaseCommand):
         return page
 
     def _certificates(self):
-        # Intentionally empty: real certificates are entered in the Wagtail admin.
-        rows = []
-        for number, holder, standard, scope, site_address, issued, expires, status in rows:
-            Certificate.objects.create(
-                number=number,
-                holder=holder,
-                standard=standard,
-                scope=scope,
-                site_address=site_address,
-                issued=issued,
-                expires=expires,
-                status=status,
-            )
+        """Nothing to seed: real certificates are entered in the Wagtail admin."""

@@ -210,7 +210,7 @@ class TestimonialsBlock(SectionHeadingMixin):
 
 
 class CertificateSpecimen(blocks.StructBlock):
-    number = blocks.CharBlock(help_text="e.g. OML-00012-Q")
+    number = blocks.CharBlock(help_text="Exactly as printed on the certificate")
     standard = blocks.CharBlock(help_text="e.g. ISO 9001:2015")
     holder = blocks.CharBlock(default="Specimen Holding Ltd.")
     issued = blocks.CharBlock(help_text="e.g. 14 Mar 2024")
